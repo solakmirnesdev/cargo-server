@@ -10,10 +10,10 @@ dotenv.config()
 // Connect to mongoDB
 connectDatabase()
 
-const port = 8000
+const port: number = parseInt(process.env.PORT || '8000', 10)
 
 const server = app.listen(port, () => {
-  console.log(`SUCCESS: Server started on ${port}`)
+  console.log(`SUCCESS: Server started on port: ${port}`)
 })
 
 process.on('SIGINT', () => {
