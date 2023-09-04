@@ -29,10 +29,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const dotenv = __importStar(require("dotenv"));
 const db_1 = require("./database/db");
+// Entry routes
 const WelcomeRoute_1 = __importDefault(require("./routes/WelcomeRoute"));
+const DocumentationRoute_1 = __importDefault(require("./routes/DocumentationRoute"));
 const app = (0, express_1.default)();
 app.use(express_1.default.static('public'));
 app.use('/', WelcomeRoute_1.default);
+app.use('/documentation', DocumentationRoute_1.default);
 // Env config
 dotenv.config();
 // Connect to mongoDB

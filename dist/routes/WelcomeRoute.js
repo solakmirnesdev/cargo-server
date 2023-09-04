@@ -8,7 +8,7 @@ const path_1 = __importDefault(require("path"));
 const router = express_1.default.Router();
 // Define route for Welcoming page
 router.get('/', (req, res) => {
-    const welcomeHtmlPath = path_1.default.join(__dirname, '../public/welcome.html');
+    const welcomeHtmlPath = path_1.default.join(__dirname, '../views/welcome.html');
     res.sendFile(welcomeHtmlPath);
 });
 exports.default = router;
