@@ -1,5 +1,5 @@
 import type { Request, Response } from 'express'
-import UserModel from '@models/UserModel'
+import UserModel from '../models/UserModel'
 // Interfaces
 import type UserDocument from '@interfaces/user-document'
 

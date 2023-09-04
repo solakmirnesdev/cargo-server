@@ -4,11 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const path_1 = __importDefault(require("path"));
+const UserController_1 = require("@controllers/UserController");
 const router = express_1.default.Router();
-// Defining route for documentation page
-router.get('/documentation', (req, res) => {
-    const documentationHtmlPath = path_1.default.join(__dirname, '../views/documentation.html');
-    res.sendFile(documentationHtmlPath);
-});
+router.post('/users', UserController_1.createUser);
+router.get('/users', UserController_1.getUsers);
 exports.default = router;

@@ -27,15 +27,24 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const body_parser_1 = __importDefault(require("body-parser"));
+const morgan_1 = __importDefault(require("morgan"));
 const dotenv = __importStar(require("dotenv"));
 const db_1 = require("./database/db");
 // Entry routes
 const WelcomeRoute_1 = __importDefault(require("./routes/WelcomeRoute"));
 const DocumentationRoute_1 = __importDefault(require("./routes/DocumentationRoute"));
+// Route config
+const routeConfig_1 = __importDefault(require("./config/routeConfig"));
 const app = (0, express_1.default)();
 app.use(express_1.default.static('public'));
+// Middleware
 app.use('/', WelcomeRoute_1.default);
-app.use('/documentation', DocumentationRoute_1.default);
+app.use('/', DocumentationRoute_1.default);
+app.use(body_parser_1.default.json());
+app.use((0, morgan_1.default)('dev'));
+// Configure routes
+(0, routeConfig_1.default)(app);
 // Env config
 dotenv.config();
 // Connect to mongoDB

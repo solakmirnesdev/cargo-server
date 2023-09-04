@@ -1,4 +1,6 @@
-import express from 'express'
+import express, { Express } from 'express'
+import bodyParser from 'body-parser'
+import morgan from 'morgan'
 import * as dotenv from 'dotenv'
 import { connectDatabase } from './database/db'
 
@@ -6,12 +8,21 @@ import { connectDatabase } from './database/db'
 import WelcomeRoute from './routes/WelcomeRoute'
 import DocumentationRoute from './routes/DocumentationRoute'
 
-const app = express()
+// Route config
+import configureRoutes from './config/routeConfig'
+
+const app: Express = express()
 
 app.use(express.static('public'))
 
+// Middleware
 app.use('/', WelcomeRoute)
 app.use('/', DocumentationRoute)
+app.use(bodyParser.json())
+app.use(morgan('dev'))
+
+// Configure routes
+configureRoutes(app)
 
 // Env config
 dotenv.config()
