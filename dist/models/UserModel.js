@@ -22,26 +22,23 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
-const dotenv = __importStar(require("dotenv"));
-const db_1 = require("./database/db");
-const app = (0, express_1.default)();
-// Env config
-dotenv.config();
-// Connect to mongoDB
-(0, db_1.connectDatabase)();
-const port = 8000;
-const server = app.listen(port, () => {
-    console.log(`SUCCESS: Server started on ${port}`);
+const mongoose_1 = __importStar(require("mongoose"));
+const userSchema = new mongoose_1.Schema({
+    username: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    email: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    password: {
+        type: String,
+        required: true
+    }
 });
-process.on('SIGINT', () => {
-    console.log('INFO: Shutting down server...');
-    server.close(() => {
-        console.log('SUCCESS: Server shut down.');
-        process.exit(0);
-    });
-});
+const UserModel = mongoose_1.default.model('User', userSchema);
+exports.default = UserModel;
