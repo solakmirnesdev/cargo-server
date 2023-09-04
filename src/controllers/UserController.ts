@@ -1,5 +1,7 @@
 import type { Request, Response } from 'express'
 import UserModel from '@models/UserModel'
+// Interfaces
+import type UserDocument from '@interfaces/user-document'
 
 // Create a new user
 export const createUser = async (req: Request, res: Response): Promise<void> => {
@@ -7,9 +9,9 @@ export const createUser = async (req: Request, res: Response): Promise<void> => 
     const { username, email, password } = req.body
 
     // Check if the user already exists
-    const existingUser = await UserModel.findOne({ email })
+    const existingUser: UserDocument | null = await UserModel.findOne({ email })
 
-    if (existingUser) {
+    if (existingUser !== null) {
       res.status(409).json({ error: 'User already exists' })
 
       return
