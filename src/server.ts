@@ -1,8 +1,12 @@
 import express from 'express'
 import * as dotenv from 'dotenv'
 import { connectDatabase } from './database/db'
+import WelcomeRoute from './routes/WelcomeRoute'
 
 const app = express()
+
+app.use(express.static('public'))
+app.use('/', WelcomeRoute)
 
 // Env config
 dotenv.config()

@@ -29,14 +29,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const dotenv = __importStar(require("dotenv"));
 const db_1 = require("./database/db");
+const WelcomeRoute_1 = __importDefault(require("./routes/WelcomeRoute"));
 const app = (0, express_1.default)();
+app.use(express_1.default.static('public'));
+app.use('/', WelcomeRoute_1.default);
 // Env config
 dotenv.config();
 // Connect to mongoDB
 (0, db_1.connectDatabase)();
-const port = 8000;
+const port = parseInt(process.env.PORT || '8000', 10);
 const server = app.listen(port, () => {
-    console.log(`SUCCESS: Server started on ${port}`);
+    console.log(`SUCCESS: Server started on port: ${port}`);
 });
 process.on('SIGINT', () => {
     console.log('INFO: Shutting down server...');

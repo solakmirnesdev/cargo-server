@@ -20,7 +20,7 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         const { username, email, password } = req.body;
         // Check if the user already exists
         const existingUser = yield UserModel_1.default.findOne({ email });
-        if (existingUser) {
+        if (existingUser !== null) {
             res.status(409).json({ error: 'User already exists' });
             return;
         }
