@@ -1,7 +1,9 @@
 import type { Request, Response } from 'express'
-import UserModel from '../models/UserModel'
-// Interfaces
-import type UserDocument from '@interfaces/user-document'
+import UserModel, { IUser } from '../models/UserModel'
+
+// Auth
+import bcrypt from 'bcrypt'
+import { generateToken } from '../services/auth/jwtService'
 
 // Create a new user
 export const createUser = async (req: Request, res: Response): Promise<void> => {
@@ -9,7 +11,7 @@ export const createUser = async (req: Request, res: Response): Promise<void> => 
     const { username, email, password } = req.body
 
     // Check if the user already exists
-    const existingUser: UserDocument | null = await UserModel.findOne({ email })
+    const existingUser: IUser | null = await UserModel.findOne({ email })
 
     if (existingUser !== null) {
       res.status(409).json({ error: 'User already exists' })
@@ -17,17 +19,23 @@ export const createUser = async (req: Request, res: Response): Promise<void> => 
       return
     }
 
+    // Hash user's password
+    const hashedPassword = await bcrypt.hash(password, 10)
+
     // Create new user document
     const newUser = new UserModel({
       username,
       email,
-      password
+      password: hashedPassword
     })
 
     // Save user to database
     await newUser.save()
 
-    res.status(201).json(newUser)
+    // Generate a JWT token for the new user
+    const token = generateToken({ userId: newUser._id, username: newUser.username })
+
+    res.status(201).json({ user: newUser, token })
   } catch (error) {
     console.log('ERROR: Creating user', error)
     res.status(500).json({ error })
