@@ -30,7 +30,7 @@ export const createUser = async (req: Request, res: Response): Promise<void> => 
     res.status(201).json(newUser)
   } catch (error) {
     console.log('ERROR: Creating user', error)
-    res.status(500).json({ error: '500, Internal Server Error' })
+    res.status(500).json({ error })
   }
 }
 
