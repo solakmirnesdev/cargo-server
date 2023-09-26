@@ -18,6 +18,7 @@ app.use(express.static('public'))
 // Middleware
 app.use('/', WelcomeRoute)
 app.use('/', DocumentationRoute)
+
 app.use(bodyParser.json())
 app.use(morgan('dev'))
 

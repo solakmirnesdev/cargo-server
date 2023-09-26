@@ -15,7 +15,7 @@ export const createUser = async (req: Request, res: Response): Promise<void> => 
 
     if (existingUser !== null) {
       res.status(409).json({ error: 'User already exists' })
-
+      console.log(existingUser)
       return
     }
 
