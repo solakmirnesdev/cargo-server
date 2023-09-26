@@ -2,6 +2,8 @@
 import type { JwtPayload } from 'jsonwebtoken'
 import jwt from 'jsonwebtoken'
 
+import crypto from 'crypto'
+
 // config
 import config from '../../config/authConfig'
 
@@ -15,8 +17,12 @@ interface AuthenticatedReq extends Request {
 
 export function generateToken (payload: any): string {
   try {
+    const secretKey = crypto.randomBytes(32).toString('hex')
+    console.log('JWT Secret Key: ', secretKey)
+
     // Sign the payload with the secret key and set an expiration time (e.g., 1 hour)
     const token = jwt.sign(payload, config.jwtSecret, { expiresIn: '1h' })
+    console.log(config)
     return token
   } catch (error) {
     console.error('Error generating token:', error)

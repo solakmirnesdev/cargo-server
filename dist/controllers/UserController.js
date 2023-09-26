@@ -13,7 +13,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getUsers = exports.createUser = void 0;
-const UserModel_1 = __importDefault(require("@models/UserModel"));
+const UserModel_1 = __importDefault(require("../models/UserModel"));
+// Auth
+const bcrypt_1 = __importDefault(require("bcrypt"));
+const jwtService_1 = require("../services/auth/jwtService");
 // Create a new user
 const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -22,21 +25,26 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         const existingUser = yield UserModel_1.default.findOne({ email });
         if (existingUser !== null) {
             res.status(409).json({ error: 'User already exists' });
+            console.log(existingUser);
             return;
         }
+        // Hash user's password
+        const hashedPassword = yield bcrypt_1.default.hash(password, 10);
         // Create new user document
         const newUser = new UserModel_1.default({
             username,
             email,
-            password
+            password: hashedPassword
         });
         // Save user to database
         yield newUser.save();
-        res.status(201).json(newUser);
+        // Generate a JWT token for the new user
+        const token = (0, jwtService_1.generateToken)({ userId: newUser._id, username: newUser.username });
+        res.status(201).json({ user: newUser, token });
     }
     catch (error) {
         console.log('ERROR: Creating user', error);
-        res.status(500).json({ error: '500, Internal Server Error' });
+        res.status(500).json({ error });
     }
 });
 exports.createUser = createUser;
